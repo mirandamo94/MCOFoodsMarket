@@ -1,151 +1,170 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
+   <style>
         body {
-    font-family: Arial, Helvetica, sans-serif;
-    width: 850px;
-    text-align: center;
-    margin: 20px auto;
-}
+        font-family: Arial, Helvetica, sans-serif;
+        width: 1500px;
+        text-align: center;
+        margin: 20px auto;
+        color: #ebc5cf;
+        }
 
-#main { background: #ebc5cf }
+        hr {
+            border: 0;
+            background-color: #333;
+            height: 1px;
+        }
 
-#header {
-    height: 250px;
-    background: #ebc5cf;
-}
-#logo {
-    height: 155px;
-    width: 155px;
-    float: left;
-    margin-left: 30px;
-    margin-top: -20px;
-}
+        table {
+            margin: 0 20px;
+            border-spacing: 0;
+            text-align: center;
+            border: solid 1px #f5eabe;
+        }
 
-#logoText {
-    float: left;
-    margin: 20px 0 0 70px;
-    /* font styles apply to text within alt tags */
-    font-family: 'American Typewriter', Courier, monospace;
-    font-size: 50px;
-    color: #333;
-}
+        a {
+            color: inherit;
+            text-decoration: underline;
+        }
 
-#widgetBar {
-    height: 50px;
-    width: 850px;
-    float: right;
-    background: #ccc;
-}
+        a:hover { text-decoration: none }
 
-.headerWidget {
-    width: 194px;
-    margin: 20px 2px;
-    font-size: small;
-    float: right;
-    line-height: 25px;
-    background: #aaa;
-}
+        a:visited { color: inherit }
 
-#footer {
-    height: 60px;
-    width: 350px;
-    clear: left;
-    background: #aaa;
-}
+        img { border: none }
 
-hr {
-    border: 0;
-    background-color: #333;
-    height: 1px;
-    margin: 0 25px;
-    width: 300px;
-}
+        input, select { margin: 5px }
 
-#indexLeftColumn {
-    height: 400px;
-    width: 350px;
-    float: left;
-    background: #ccc;
-}
+        li { margin: 10px 0 }
 
-#indexRightColumn {
-    height: 400px;
-    width: 500px;
-    float: left;
-    background: #eee;
-}
-.categoryBox {
-    height: 176px;
-    width: 212px;
-    margin: 21px 14px 6px;
-    float: inherit;
-    background: #ccc;
-}
+        label { line-height: 30px }
 
-.categoryLabelText {
-    line-height: 150%;
-    font-size: x-large;
-}
+        label.error {
+            font-size: smaller;
+            line-height: 20px;
+            font-style: italic;
+        }
+    #main { background: #ebc5cf }
 
-    </style>
+    #singleColumn {
+        margin: 20px 30px;
+        text-align: left;
+    }
+
+    .lightBlue { background-color: #edf8f7 }
+
+    .white { background-color: #fff }
+
+    .bubble {
+        font-weight: bold;
+        background-color: #f5eabe;
+        padding: 5px;
+        color: inherit;
+        display: inline;
+        border-radius: 4px;
+    }
+
+    .hMargin { margin: 0 30px }
+
+    .smallText { font-size: small }
+
+    .reallySmallText { font-size: xx-small }
+
+    .header {
+        background-color: #ffffff;
+        height: 30px;
+    }
+
+    .error {
+        color: #c00;
+        font-style: italic;
+    }
+
+    .tableHeading {
+        font-weight: bold;
+        background-color: #edf8f7;
+    }
+
+    #indexLeftColumn {
+        text-align: left;
+        height: 600px;
+        width: 350px;
+        float: left;
+        background-color: #c3e3e0
+    }
+
+    #indexRightColumn {
+        text-align: right;
+        height: 600px;
+        width: 900px;
+        float: right;
+        
+    }
+
+    #welcomeText {
+        margin: 30px 5px 0 30px;
+        line-height: 1.4em;
+    }
+
+    .categoryBox {
+        height: 260px;
+        width: 260px;
+        margin: 21px 14px 6px;
+        float: left;
+        background-color: #c3e3e5
+    }
+
+    .categoryBox a { text-decoration: none }
+
+    .categoryLabel {
+        position: absolute;
+        background-color: #fff;
+        opacity: 0.7;
+        height: 40px;
+        width: 260px;
+        margin: 2px;
+    }
+
+    .categoryLabelText {
+        position: absolute;
+        line-height: 150%;
+        font-size: x-large;
+        margin: 3px 10px;
+    }
+
+    .categoryImage {
+        padding: 1px;
+        border:solid 1px #555;
+    }
+</style>
 </head>
-<body>      
-    <div id="main">
-        <div id="header">
-            <div id="widgetBar">
+<body>        
+<c:set var='view' value='/index' scope='session' />
 
-        <div class="headerWidget">
-            [ language toggle ]
-        </div>
 
-        <div class="headerWidget">
-            [ shopping cart widget ]
-        </div>
+<%-- HTML markup starts below --%>
 
+<div id="indexLeftColumn">
+    <div id="welcomeText">
+        <p style="font-size: larger"><fmt:message key='greeting' /></p>
+
+        <p><fmt:message key='introText' /></p>
     </div>
+</div>
 
-        <a href="#">
-            <img src="#" id="logo" alt="MCO logo">
-        </a>
+<div id="indexRightColumn">
+    <c:forEach var="category" items="${categories}">
+        <div class="categoryBox">
+            <a href="<c:url value='category?${category.id}'/>">
+                <span class="categoryLabel"></span>
+                <span class="categoryLabelText"><fmt:message key='${category.name}'/></span>
 
-        <img src="#" id="logoText" alt="MCO Food Market">
-            </div>
-
-        <div id="indexLeftColumn">
-           <div id="welcomeText">
-                <p>[ welcome text ]</p>
-           </div>
+                <img src="${initParam.categoryImagePath}${category.name}.jpg"
+                     alt="<fmt:message key='${category.name}'/>" class="categoryImage">
+            </a>
         </div>
-
-        <div id="indexRightColumn">
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">American</span>
-                </a>
-            </div>
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">Japanese</span>
-                </a>
-            </div>
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">Italian</span>
-                </a>
-            </div>
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">Chinese</span>
-                </a>
-            </div>
-        </div>
-
-        <div id="footer">
-            <hr>
-            <p id="footerText">[ footer text ]</p>
-        </div>
-    </div>
+    </c:forEach>
+</div>
 </body>
 </html>
