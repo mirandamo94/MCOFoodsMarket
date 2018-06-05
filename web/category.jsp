@@ -1,5 +1,10 @@
-<!DOCTYPE html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+
+<!DOCTYPE html>   
 <html>
+    
+
 <head>
     <style>
         body {
@@ -91,7 +96,22 @@ hr {
 
     </style>
 </head>
-<body>      
+<body> 
+    
+    <sql:query var="category" dataSource="jdbc/mcofoodsmarket">
+    SELECT * FROM category
+    </sql:query>
+    
+    <sql:query var="selectedItem" dataSource="jdbc/mcofoodsmarket">
+    SELECT name FROM category WHERE id = ?
+    <sql:param value="${pageContext.request.queryString}"/>
+    </sql:query>
+    
+    <sql:query var="categoryProducts" dataSource="jdbc/mcofoodsmarket">
+    SELECT * FROM product WHERE category_id = ?
+    <sql:param value="${pageContext.request.queryString}"/>
+    </sql:query>
+    
     <div id="main">
         <div id="header">
             <div id="widgetBar">
@@ -116,35 +136,74 @@ hr {
         <div id="indexLeftColumn">
            <div id="welcomeText">
                 <p>[ welcome text ]</p>
+                
+                
+                <c:forEach var="category" items="${category.rows}">
+
+        <c:choose>
+            <c:when test="${category.id == pageContext.request.queryString}">
+                <div class="categoryButton" id="selectedCategory">
+                    <span class="categoryText">
+                        ${category.name}
+                        
+                    </span>
+                        <p id="categoryTitle">${selectedCategory.rows[0].name}</p>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <a href="category?${category.id}" class="categoryButton">
+                    <div class="categoryText">
+                        ${category.name}
+                    </div>
+                </a>
+            </c:otherwise>
+        </c:choose>
+
+    </c:forEach>
            </div>
         </div>
 
         <div id="indexRightColumn">
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">American</span>
-                </a>
-            </div>
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">Japanese</span>
-                </a>
-            </div>
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">Italian</span>
-                </a>
-            </div>
-            <div class="categoryBox">
-                <a href="#">
-                    <span class="categoryLabelText">Chinese</span>
-                </a>
-            </div>
+            <p id="categoryTitle"><fmt:message key="${selectedCategory.name}" /></p>
+
+    <table id="productTable">
+
+        <c:forEach var="product" items="${categoryProducts}" varStatus="iter">
+
+            <tr class="${((iter.index % 2) == 0) ? 'lightPink' : 'white'}">
+                <td>
+                    <img src="${initParam.productImagePath}${product.name}.png"
+                         alt="<fmt:message key='${product.name}'/>">
+                </td>
+
+                <td>
+                    <fmt:message key="${product.name}"/>
+                    <br>
+                    <span class="smallText"><fmt:message key='${product.name}Description'/></span>
+                </td>
+
+                <td><fmt:formatNumber type="currency" currencySymbol="&#36; " value="${product.price}"/></td>
+
+                <td>
+                    <form action="<c:url value='addToCart'/>" method="post">
+                        <input type="hidden"
+                               name="productId"
+                               value="${product.id}">
+                        <input type="submit"
+                               name="submit"
+                               value="<fmt:message key='addToCart'/>">
+                    </form>
+                </td>
+            </tr>
+
+        </c:forEach>
+
+    </table>
         </div>
 
         <div id="footer">
             <hr>
-            <p id="footerText">[ footer text ]</p>
+            <p id="footerText"> MCO Foods Market 2018 </p>
         </div>
     </div>
 </body>
